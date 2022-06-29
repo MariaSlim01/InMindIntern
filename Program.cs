@@ -6,10 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-var serviceProvider = new ServiceCollection()
-    .AddSingleton<IReporterHelper,ReporterHelper>();
 
-
+builder.Services.AddScoped(typeof(IReporterHelper), typeof(ReporterHelper));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -33,4 +33,11 @@ public class ReporterHelper:IReporterHelper
 
     }
 
+    public List<Reporter> GetReportersByName(List<Reporter> reporters, string name)
+    {
+        List<Reporter> reporters1 = reporters. Where(reporter => reporter.name.Contains(name)).ToList();
+        return reporters1;
+    }
+
+
 }
