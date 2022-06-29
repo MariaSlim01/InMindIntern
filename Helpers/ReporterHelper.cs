@@ -38,6 +38,31 @@ public class ReporterHelper:IReporterHelper
         List<Reporter> reporters1 = reporters. Where(reporter => reporter.name.Contains(name)).ToList();
         return reporters1;
     }
+    public Reporter ChangeNameByID(List<Reporter> reporters, int id, string name)
+    {
+        try
+        {
+            Reporter reporter1 = reporters.Where(reporter => reporter.id == id).FirstOrDefault();
+            if (reporter1 != null)
+            {
+                reporter1.name = name;
+                return reporter1;
+            }
+
+            throw new ReporterNotFoundException();
+        }
+        catch (ReporterNotFoundException e)
+        {
+            Console.WriteLine("Reporter not found");
+        }
+        catch (Exception d)
+        {
+            Console.WriteLine(d.Message);
+        }
+
+        return null;
+    }
+    
 
 
 }
