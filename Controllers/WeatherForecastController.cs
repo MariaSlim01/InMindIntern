@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Exceptions;
@@ -12,10 +13,12 @@ namespace WebApplication1.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    public IReporterHelper _repHelper;
-    public WeatherForecastController(IReporterHelper ireporterhelper)
+    private IReporterHelper _repHelper;
+    private IGetDateHelper _getDateHelper;
+    public WeatherForecastController(IReporterHelper ireporterhelper, IGetDateHelper igetdatehelper)
     {
         _repHelper = ireporterhelper;
+        _getDateHelper = igetdatehelper;
     }
     public List <Reporter> Reporters = new List<Reporter>()
     {
@@ -76,4 +79,39 @@ public class WeatherForecastController : ControllerBase
          return _repHelper.GetReportersByName(Reporters, value);
     }
     
+    [HttpGet("GetDateByLanguage")]
+    public string GetDateFromLang([FromHeader] string lang)
+    {
+        try
+        {
+            CultureInfo[] cinfo = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
+            List<string> names=new List<string>();
+            foreach (var cinf in cinfo)
+            {
+               names.Add(cinf.Name); 
+            }
+
+            var check = names.Contains(lang);
+
+
+            if (check==true)
+            {
+                CultureInfo a = new CultureInfo(lang);
+                string us = DateTime.Now.ToString(a);
+                return us;
+            }
+
+            throw new InvalidLanguageException();
+        }
+        catch (InvalidLanguageException e)
+        {
+            Console.WriteLine("Invalid input language");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        return null;
+    }
 }
