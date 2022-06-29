@@ -92,4 +92,10 @@ public class WeatherForecastController : ControllerBase
     {
        return _repHelper.ChangeNameByID(Reporters, req.id, req.Name);
     }
+    [HttpDelete("Delete")]
+    public Reporter DeleteById([FromHeader] int id)
+    {
+        return _repHelper.DeleteByID(Reporters, id);
+
+    }
 }

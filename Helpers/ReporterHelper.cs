@@ -63,6 +63,30 @@ public class ReporterHelper:IReporterHelper
         return null;
     }
     
+    public Reporter DeleteByID(List<Reporter> reporters, int id)
+    {
+        try
+        {
+            Reporter reporter1 = reporters.Where(reporter => reporter.id == id).FirstOrDefault();
+            if (reporter1 != null)
+            {
+                reporters.Remove(reporter1);
+                return reporter1;
+            }
+
+            throw new ReporterNotFoundException();
+        }
+        catch (ReporterNotFoundException e)
+        {
+            Console.WriteLine("Reporter not found");
+        }
+        catch (Exception d)
+        {
+            Console.WriteLine(d.Message);
+        }
+
+        return null;
+    }
 
 
 }
