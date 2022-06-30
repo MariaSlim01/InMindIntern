@@ -15,14 +15,17 @@ public class WeatherForecastController : ControllerBase
 {
     private IReporterHelper _repHelper;
     private IGetDateHelper _getDateHelper;
+    private IFileUploadService _uploadService;
 
-    public WeatherForecastController(IReporterHelper ireporterhelper, IGetDateHelper igetdatehelper)
+    public WeatherForecastController(IReporterHelper ireporterhelper, IGetDateHelper igetdatehelper,
+        IFileUploadService iuploadservice)
     {
         _repHelper = ireporterhelper;
         _getDateHelper = igetdatehelper;
+        _uploadService = iuploadservice;
     }
 
-    public List<Reporter> Reporters = new List<Reporter>()
+    public static List<Reporter> Reporters = new List<Reporter>()
     {
         new Reporter()
         {
@@ -65,15 +68,6 @@ public class WeatherForecastController : ControllerBase
         return a;
     }
 
-    /*[HttpPost("DeleteReporter")]
-    public Reporter DeleteReporter([FromBody] DeleteReporterRequest request)
-    {
-        for (int i = 0; i < Reporters.Count; i++)
-        {
-            if Reporters.
-        }
-    }*/
-
     [HttpGet("/FindByName")]
 
     public List<Reporter> GetPart([FromQuery] string value)
@@ -87,15 +81,28 @@ public class WeatherForecastController : ControllerBase
         return _getDateHelper.GetDate(lang);
 
     }
+
     [HttpPost("ChangeReporterName")]
-    public Reporter ChangeReporter([FromBody] EditReporterNameByIDRequest req )
+    public Reporter ChangeReporter([FromBody] EditReporterNameByIDRequest req)
     {
-       return _repHelper.ChangeNameByID(Reporters, req.id, req.Name);
+        return _repHelper.ChangeNameByID(Reporters, req.id, req.Name);
     }
+
     [HttpDelete("Delete")]
     public Reporter DeleteById([FromHeader] int id)
     {
         return _repHelper.DeleteByID(Reporters, id);
 
+    }
+    //[HttpPost("UploadFile")]
+    //public bool UploadFile(IFormFile file)
+    //{
+    //    return _uploadService.UploadFile(file);
+
+    // }
+    [HttpPost]
+    public Task<IActionResult> Post(IFormFile file)
+    {
+        return _uploadService.UploadFile(file);
     }
 }

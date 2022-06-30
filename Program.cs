@@ -16,7 +16,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped(typeof(IReporterHelper), typeof(ReporterHelper));
 builder.Services.AddScoped(typeof(IGetDateHelper), typeof(GetDateHelper));
-
+builder.Services.AddTransient(typeof(IFileUploadService), typeof(FileUploadService));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
